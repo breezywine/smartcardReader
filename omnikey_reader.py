@@ -1,6 +1,8 @@
 from smartcard.System import readers
 from smartcard.util import toHexString, toBytes, toASCIIString 
 
+
+
 # ANSI escape code for color
 reset_color = '\033[0m'
 blue_color = "\033[34m"
@@ -8,6 +10,10 @@ cyan_color = "\033[0;36m"
 green_color = '\033[92m'
 red_color = '\033[91m'
 yellow_color = "\033[1;33m"
+
+
+
+
 
 # omnikey common APDU cmd
 # https://www3.hidglobal.com/sites/default/files/resource_files/plt-03099_a.5_-_omnikey_sw_dev_guide_0.pdf
@@ -38,7 +44,13 @@ def send_APDU_cmd(key_str):
         print("Data successfully read from the card:")
         print(str_rsp)
         print("\theader   " + toHexString(response[:3]))
-        print("\tdata     " + green_color + toASCIIString(response[3:]) + reset_color)
+        print("\tlength   " + str(response[3]))
+        converted_str = toASCIIString(response[4:])
+        if all(c == '.' for c in converted_str):
+            print("\tdata     " + cyan_color + toHexString(response[4:]) + reset_color)
+        else:
+            print("\tdata     " + green_color + converted_str.rstrip('.') + reset_color)
+        #print("\tdata     " + green_color + toASCIIString(response[4:]) + reset_color)
         print("\tstatus   " + str_sw)
     else:
         print("\tError reading data from the card.")
