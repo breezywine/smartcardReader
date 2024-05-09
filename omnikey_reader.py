@@ -1,24 +1,32 @@
 from smartcard.System import readers
 from smartcard.util import toHexString, toBytes, toASCIIString 
-from smartcard.Exceptions import CardConnectionException, NoCardException
 
 # ANSI escape code for color
 reset_color = '\033[0m'
 blue_color = "\033[34m"
+cyan_color = "\033[0;36m"
 green_color = '\033[92m'
 red_color = '\033[91m'
+yellow_color = "\033[1;33m"
 
 
 # https://www3.hidglobal.com/sites/default/files/resource_files/plt-03099_a.5_-_omnikey_sw_dev_guide_0.pdf
 APDU = {
-    "get productName"   : "FF 70 07 6B 08 A2 06 A0 04 A0 02 82 00 00",
-    "get serialNumber"  : "FF 70 07 6B 08 A2 06 A0 04 A0 02 92 00 00",
-    "get firmwareLabel" : "FF 70 07 6B 08 A2 06 A0 04 A0 02 96 00 00",
-
+    # Reader Information A2h
+    # Get A0h
+    # Reader Capabilities A0h
+    "get productName"       : "FF 70 07 6B 08 A2 06 A0 04 A0 02 82 00 00",
+    "get productPlatform"   : "FF 70 07 6B 08 A2 06 A0 04 A0 02 83 00 00",
+    "get serialNumber"      : "FF 70 07 6B 08 A2 06 A0 04 A0 02 92 00 00",
+    "get firmwareLabel"     : "FF 70 07 6B 08 A2 06 A0 04 A0 02 96 00 00",
+    "get firmwareVersion"   : "FF 70 07 6B 08 A2 06 A0 04 A0 02 85 00 00",
+    "get hardwareVersion"   : "FF 70 07 6B 08 A2 06 A0 04 A0 02 89 00 00",
+    "get vendorName"        : "FF 70 07 6B 08 A2 06 A0 04 A0 02 8F 00 00",
+    
 }
 
 def send_APDU_cmd(key_str):
-    print("\n# " + key_str)
+    print(blue_color + "\n# " + key_str + reset_color)
     apdu_cmd_str_with_space=APDU[key_str]
     command = toBytes(apdu_cmd_str_with_space)   
     response, sw1, sw2 = connection.transmit(command)
@@ -39,7 +47,7 @@ def send_APDU_cmd(key_str):
 
 #Establish connection with the card reader
 reader = readers()[0]
-print(reader)
+print(yellow_color + str(reader) + reset_color)
 connection = reader.createConnection()
 
 try:
@@ -52,6 +60,6 @@ try:
     # Disconnect from the card reader
     connection.disconnect()
     
-except NoCardException:
-    print("ERROR: Card not present")
+except Exception as e:
+    print(red_color + str(e) + reset_color)
     
