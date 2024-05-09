@@ -21,6 +21,7 @@ APDU = {
     # Reader Information A2h
     # Get A0h
     # Reader Capabilities A0h
+    "get deviceID"          : "FF 70 07 6B 08 A2 06 A0 04 A0 02 81 00 00",
     "get productName"       : "FF 70 07 6B 08 A2 06 A0 04 A0 02 82 00 00",
     "get productPlatform"   : "FF 70 07 6B 08 A2 06 A0 04 A0 02 83 00 00",
     "get serialNumber"      : "FF 70 07 6B 08 A2 06 A0 04 A0 02 92 00 00",
@@ -41,8 +42,8 @@ def send_APDU_cmd(key_str):
     str_sw = toHexString([sw1, sw2])
     #Print the response data
     if sw1 == 0x90 and sw2 == 0x00:
-        print("Data successfully read from the card:")
-        print(str_rsp)
+        print("cmd \t" + apdu_cmd_str_with_space)
+        print("rsp \t" + str_rsp)
         print("\theader   " + toHexString(response[:3]))
         print("\tlength   " + str(response[3]))
         converted_str = toASCIIString(response[4:])
