@@ -9,7 +9,7 @@ green_color = '\033[92m'
 red_color = '\033[91m'
 yellow_color = "\033[1;33m"
 
-
+# omnikey common APDU cmd
 # https://www3.hidglobal.com/sites/default/files/resource_files/plt-03099_a.5_-_omnikey_sw_dev_guide_0.pdf
 APDU = {
     # Reader Information A2h
